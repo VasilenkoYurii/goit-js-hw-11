@@ -1,19 +1,8 @@
 import axios from 'axios';
 const axios = require('axios');
-import Notiflix from 'notiflix';
-import LoadMoreBtn from './components/loadMoreBtn';
-
-const loadMoreBtn = new LoadMoreBtn({
-  selector: '.load-more',
-});
 
 const API_KEY = '33687717-ba072cce310c3fac718a1e690';
 const BASE_URL = 'https://pixabay.com/api';
-const options = {
-  headers: {
-    Authorization: API_KEY,
-  },
-};
 
 export default class NewsApiService {
   constructor() {

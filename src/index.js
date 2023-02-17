@@ -1,7 +1,8 @@
 import './css/styles.css';
 import 'simplelightbox/dist/simple-lightbox.min.css';
-import Notiflix from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
+import Notiflix from 'notiflix';
+import debounce from 'lodash.debounce';
 import NewsApiService from './js/fetchImages';
 import LoadMoreBtn from './js/components/loadMoreBtn';
 import renderImageGallery from './js/components/renderImageGallery';
@@ -12,14 +13,6 @@ const refs = {
   loadMoreBtn: document.querySelector('.load-more'),
   body: document.querySelector('body'),
 };
-
-// refs.body.addEventListener('click', e => {
-//   // e.preventDefault();
-//   console.log(e);
-//   if (e.target.nodeName === 'IMG') {
-//     e.preventDefault();
-//   }
-// });
 
 const newsApiService = new NewsApiService();
 const loadMoreBtn = new LoadMoreBtn({
@@ -88,6 +81,7 @@ function arrfetchImages() {
 function appendArticlesMarkup(images) {
   const countryMarkup = renderImageGallery(images);
   refs.galleryImage.insertAdjacentHTML('beforeend', countryMarkup);
+  SimpleLightbox = new SimpleLightbox('.gallery a').refresh();
   loadMoreBtn.show();
 }
 
@@ -95,4 +89,17 @@ function deleteRender() {
   refs.galleryImage.innerHTML = '';
 }
 
-SimpleLightbox = new SimpleLightbox('.gallery a').refresh();
+// document.addEventListener('scroll', debounce(infinityScroll, 400));
+// function infinityScroll() {
+//   const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+
+//   newsApiService.fetchImages().then(response => {
+//     if (response.data.hits.length === 0) {
+//       return;
+//     }
+//     if (clientHeight + scrollTop + 300 >= scrollHeight) {
+//       console.log('est');
+//       arrfetchImages();
+//     }
+//   });
+// }

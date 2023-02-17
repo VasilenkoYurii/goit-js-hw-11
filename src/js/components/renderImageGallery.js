@@ -12,38 +12,17 @@ export default function renderImageGallery(images) {
       }) => {
         return `
         <a class="gallery__item__link" href="${largeImageURL}">
-        <div class="photo-card">
-        
-  <img src="${webformatURL}" alt="${tags}" loading="lazy" />
- 
-  <div class="info">
-    <p class="info-item">
-      <b>Likes</b>
-      ${likes}
-    </p>
-    <p class="info-item">
-      <b>Views</b>
-      ${views}
-    </p>
-    <p class="info-item">
-      <b>Comments</b>
-      ${comments}
-    </p>
-    <p class="info-item">
-      <b>Downloads</b>
-      ${downloads}
-    </p>
-  </div>
-</div>
- </a>`;
+          <div class="photo-card">
+              <img src="${webformatURL}" alt="${tags}" loading="lazy" />
+            <div class="info">
+              <p class="info-item"><b>Likes</b>${likes}</p>
+              <p class="info-item"><b>Views</b>${views}</p>
+              <p class="info-item"><b>Comments</b>${comments}</p>
+              <p class="info-item"><b>Downloads</b>${downloads}</p>
+            </div>
+          </div>
+        </a>`;
       }
     )
     .join('');
 }
-
-// const linkOfGallery = document.querySelectorAll('.gallery__item__link');
-
-// linkOfGallery.addEventListener('click', eventLink);
-// function eventLink(e) {
-//   e.preventDefault();
-// }
