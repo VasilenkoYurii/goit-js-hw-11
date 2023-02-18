@@ -84,7 +84,7 @@ function arrfetchImages() {
 function appendArticlesMarkup(images) {
   const countryMarkup = renderImageGallery(images);
   refs.galleryImage.insertAdjacentHTML('beforeend', countryMarkup);
-  SimpleLightbox = new SimpleLightbox('.gallery a').refresh();
+  new SimpleLightbox('.gallery a').refresh();
 }
 
 function deleteRender() {
