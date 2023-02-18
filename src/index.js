@@ -1,11 +1,9 @@
 import './css/styles.css';
 import 'simplelightbox/dist/simple-lightbox.min.css';
-import SimpleLightbox from 'simplelightbox';
 import Notiflix from 'notiflix';
-// import debounce from 'lodash.debounce';
 import NewsApiService from './js/fetchImages';
-// import LoadMoreBtn from './js/components/loadMoreBtn';
 import renderImageGallery from './js/components/renderImageGallery';
+import SimpleLightbox from 'simplelightbox';
 
 const refs = {
   searchForm: document.querySelector('#search-form'),
@@ -14,8 +12,6 @@ const refs = {
   sentinel: document.querySelector('#sentinel'),
 };
 
-const newsApiService = new NewsApiService();
-
 const onEntry = entries => {
   entries.forEach(entrie => {
     if (entrie.isIntersecting && newsApiService.query !== '') {
@@ -23,19 +19,13 @@ const onEntry = entries => {
     }
   });
 };
-
 const options = {
   rootMargin: '150px',
 };
 const observer = new IntersectionObserver(onEntry, options);
-// const loadMoreBtn = new LoadMoreBtn({
-//   selector: '.load-more',
-//   hidden: true,
-// });
+const newsApiService = new NewsApiService();
 
 refs.searchForm.addEventListener('submit', userSearchImages);
-
-// refs.loadMoreBtn.addEventListener('click', arrfetchImages);
 
 function userSearchImages(e) {
   e.preventDefault();
@@ -59,11 +49,9 @@ function userSearchImages(e) {
   observer.observe(refs.sentinel);
   newsApiService.resetPage();
   deleteRender();
-  // arrfetchImages();
 }
 
 function arrfetchImages() {
-  // loadMoreBtn.disable();
   newsApiService
     .fetchImages()
     .then(response => {
@@ -75,7 +63,6 @@ function arrfetchImages() {
           "We're sorry, but you've reached the end of search results."
         );
         observer.unobserve(refs.sentinel);
-        // loadMoreBtn.hide();
         return;
       }
 
@@ -90,7 +77,6 @@ function arrfetchImages() {
     })
     .then(images => {
       appendArticlesMarkup(images);
-      // loadMoreBtn.enable();
     })
     .catch(error => console.log(error));
 }
@@ -99,24 +85,8 @@ function appendArticlesMarkup(images) {
   const countryMarkup = renderImageGallery(images);
   refs.galleryImage.insertAdjacentHTML('beforeend', countryMarkup);
   SimpleLightbox = new SimpleLightbox('.gallery a').refresh();
-  // loadMoreBtn.show();
 }
 
 function deleteRender() {
   refs.galleryImage.innerHTML = '';
 }
-
-// document.addEventListener('scroll', debounce(infinityScroll, 400));
-// function infinityScroll() {
-//   const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-
-//   newsApiService.fetchImages().then(response => {
-//     if (response.data.hits.length === 0) {
-//       return;
-//     }
-//     if (clientHeight + scrollTop + 300 >= scrollHeight) {
-//       console.log('est');
-//       arrfetchImages();
-//     }
-//   });
-// }
