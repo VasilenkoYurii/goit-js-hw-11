@@ -1,9 +1,9 @@
 import './css/styles.css';
-// import 'simplelightbox/dist/simple-lightbox.min.css';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 import Notiflix from 'notiflix';
 import NewsApiService from './js/fetchImages';
 import renderImageGallery from './js/components/renderImageGallery';
-// import SimpleLightbox from 'simplelightbox';
+import SimpleLightbox from 'simplelightbox';
 
 const refs = {
   searchForm: document.querySelector('#search-form'),
