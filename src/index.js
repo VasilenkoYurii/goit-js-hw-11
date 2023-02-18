@@ -2,7 +2,7 @@ import './css/styles.css';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import SimpleLightbox from 'simplelightbox';
 import Notiflix from 'notiflix';
-import debounce from 'lodash.debounce';
+// import debounce from 'lodash.debounce';
 import NewsApiService from './js/fetchImages';
 import LoadMoreBtn from './js/components/loadMoreBtn';
 import renderImageGallery from './js/components/renderImageGallery';

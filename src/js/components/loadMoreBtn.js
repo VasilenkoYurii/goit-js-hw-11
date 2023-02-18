@@ -14,11 +14,13 @@ export default class LoadMoreBtn {
   enable() {
     this.refs.button.disabled = false;
     this.refs.button.textContent = 'Load more';
+    this.refs.button.style.cursor = 'pointer';
   }
 
   disable() {
     this.refs.button.disabled = true;
     this.refs.button.textContent = 'loading...';
+    this.refs.button.style.cursor = 'default';
   }
 
   show() {
