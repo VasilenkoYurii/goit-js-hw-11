@@ -4,27 +4,42 @@ import SimpleLightbox from 'simplelightbox';
 import Notiflix from 'notiflix';
 // import debounce from 'lodash.debounce';
 import NewsApiService from './js/fetchImages';
-import LoadMoreBtn from './js/components/loadMoreBtn';
+// import LoadMoreBtn from './js/components/loadMoreBtn';
 import renderImageGallery from './js/components/renderImageGallery';
 
 const refs = {
   searchForm: document.querySelector('#search-form'),
   galleryImage: document.querySelector('.gallery'),
   loadMoreBtn: document.querySelector('.load-more'),
-  body: document.querySelector('body'),
+  sentinel: document.querySelector('#sentinel'),
 };
 
 const newsApiService = new NewsApiService();
-const loadMoreBtn = new LoadMoreBtn({
-  selector: '.load-more',
-  hidden: true,
-});
+
+const onEntry = entries => {
+  entries.forEach(entrie => {
+    if (entrie.isIntersecting && newsApiService.query !== '') {
+      arrfetchImages();
+    }
+  });
+};
+
+const options = {
+  rootMargin: '150px',
+};
+const observer = new IntersectionObserver(onEntry, options);
+// const loadMoreBtn = new LoadMoreBtn({
+//   selector: '.load-more',
+//   hidden: true,
+// });
 
 refs.searchForm.addEventListener('submit', userSearchImages);
-refs.loadMoreBtn.addEventListener('click', arrfetchImages);
+
+// refs.loadMoreBtn.addEventListener('click', arrfetchImages);
 
 function userSearchImages(e) {
   e.preventDefault();
+  observer.unobserve(refs.sentinel);
 
   newsApiService.query = e.srcElement[0].value;
 
@@ -41,13 +56,14 @@ function userSearchImages(e) {
     }
   });
 
+  observer.observe(refs.sentinel);
   newsApiService.resetPage();
   deleteRender();
-  arrfetchImages();
+  // arrfetchImages();
 }
 
 function arrfetchImages() {
-  loadMoreBtn.disable();
+  // loadMoreBtn.disable();
   newsApiService
     .fetchImages()
     .then(response => {
@@ -58,7 +74,8 @@ function arrfetchImages() {
         Notiflix.Notify.failure(
           "We're sorry, but you've reached the end of search results."
         );
-        loadMoreBtn.hide();
+        observer.unobserve(refs.sentinel);
+        // loadMoreBtn.hide();
         return;
       }
 
@@ -73,7 +90,7 @@ function arrfetchImages() {
     })
     .then(images => {
       appendArticlesMarkup(images);
-      loadMoreBtn.enable();
+      // loadMoreBtn.enable();
     })
     .catch(error => console.log(error));
 }
@@ -82,7 +99,7 @@ function appendArticlesMarkup(images) {
   const countryMarkup = renderImageGallery(images);
   refs.galleryImage.insertAdjacentHTML('beforeend', countryMarkup);
   SimpleLightbox = new SimpleLightbox('.gallery a').refresh();
-  loadMoreBtn.show();
+  // loadMoreBtn.show();
 }
 
 function deleteRender() {
