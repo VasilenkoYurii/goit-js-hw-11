@@ -1,9 +1,10 @@
 import './css/styles.css';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import Notiflix from 'notiflix';
+import SimpleLightbox from 'simplelightbox';
 import NewsApiService from './js/fetchImages';
 import renderImageGallery from './js/components/renderImageGallery';
-import SimpleLightbox from 'simplelightbox';
+import btnUp from './js/components/btnUp';
 
 const refs = {
   searchForm: document.querySelector('#search-form'),
@@ -26,6 +27,7 @@ const observer = new IntersectionObserver(onEntry, options);
 const newsApiService = new NewsApiService();
 
 refs.searchForm.addEventListener('submit', userSearchImages);
+btnUp.addEventListener();
 
 function userSearchImages(e) {
   e.preventDefault();
