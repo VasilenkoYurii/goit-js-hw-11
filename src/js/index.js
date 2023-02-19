@@ -13,8 +13,8 @@ const refs = {
   loadMoreBtn: document.querySelector('.load-more'),
   sentinel: document.querySelector('#sentinel'),
   toggle: document.querySelector('.toggle'),
-  // body: document.querySelector('body'),
 };
+let messageShown = false;
 
 const onEntry = entries => {
   entries.forEach(entrie => {
@@ -28,6 +28,7 @@ const options = {
 };
 const observer = new IntersectionObserver(onEntry, options);
 const newsApiService = new NewsApiService();
+const modal = new SimpleLightbox('.gallery a');
 
 refs.searchForm.addEventListener('submit', userSearchImages);
 refs.toggle.addEventListener('click', blackWhite);
@@ -37,6 +38,7 @@ btnUp.addEventListener();
 function userSearchImages(e) {
   e.preventDefault();
   observer.unobserve(refs.sentinel);
+  messageShown = false;
 
   newsApiService.query = e.srcElement[0].value;
 
@@ -44,14 +46,6 @@ function userSearchImages(e) {
     Notiflix.Notify.failure('Oops, enter image name');
     return;
   }
-
-  newsApiService.fetchImages().then(response => {
-    if (response.data.totalHits !== 0) {
-      Notiflix.Notify.info(
-        `Hooray! We found ${response.data.totalHits} images.`
-      );
-    }
-  });
 
   observer.observe(refs.sentinel);
   newsApiService.resetPage();
@@ -64,6 +58,13 @@ function arrfetchImages() {
     .then(response => {
       const arrImages = response.data.hits;
       newsApiService.incrementPage();
+
+      if (!messageShown && response.data.totalHits !== 0) {
+        Notiflix.Notify.info(
+          `Hooray! We found ${response.data.totalHits} images.`
+        );
+        messageShown = true;
+      }
 
       if (response.data.hits.length === 0) {
         Notiflix.Notify.failure(
@@ -91,7 +92,7 @@ function arrfetchImages() {
 function appendArticlesMarkup(images) {
   const countryMarkup = renderImageGallery(images);
   refs.galleryImage.insertAdjacentHTML('beforeend', countryMarkup);
-  new SimpleLightbox('.gallery a').refresh();
+  modal.refresh();
   addStyleBlackWrite();
 }
 
