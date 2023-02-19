@@ -1,16 +1,19 @@
-import './css/styles.css';
+import '../css/styles.css';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import Notiflix from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
-import NewsApiService from './js/fetchImages';
-import renderImageGallery from './js/components/renderImageGallery';
-import btnUp from './js/components/btnUp';
+import NewsApiService from './components/fetchImages';
+import renderImageGallery from './components/renderImageGallery';
+import btnUp from './components/btnUp';
+import { blackWhite, addStyleBlackWrite } from './components/blackWhite';
 
 const refs = {
   searchForm: document.querySelector('#search-form'),
   galleryImage: document.querySelector('.gallery'),
   loadMoreBtn: document.querySelector('.load-more'),
   sentinel: document.querySelector('#sentinel'),
+  toggle: document.querySelector('.toggle'),
+  // body: document.querySelector('body'),
 };
 
 const onEntry = entries => {
@@ -27,6 +30,8 @@ const observer = new IntersectionObserver(onEntry, options);
 const newsApiService = new NewsApiService();
 
 refs.searchForm.addEventListener('submit', userSearchImages);
+refs.toggle.addEventListener('click', blackWhite);
+
 btnUp.addEventListener();
 
 function userSearchImages(e) {
@@ -87,6 +92,7 @@ function appendArticlesMarkup(images) {
   const countryMarkup = renderImageGallery(images);
   refs.galleryImage.insertAdjacentHTML('beforeend', countryMarkup);
   new SimpleLightbox('.gallery a').refresh();
+  addStyleBlackWrite();
 }
 
 function deleteRender() {
