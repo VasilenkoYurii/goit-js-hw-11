@@ -15,6 +15,8 @@ const refs = {
   toggle: document.querySelector('.toggle'),
 };
 let messageShown = false;
+let totalHit = 0;
+addStyleBlackWrite();
 
 const onEntry = entries => {
   entries.forEach(entrie => {
@@ -40,7 +42,7 @@ function userSearchImages(e) {
   observer.unobserve(refs.sentinel);
   messageShown = false;
 
-  newsApiService.query = e.srcElement[0].value;
+  newsApiService.query = e.srcElement[0].value.trim();
 
   if (newsApiService.query === '') {
     Notiflix.Notify.failure('Oops, enter image name');
@@ -53,10 +55,25 @@ function userSearchImages(e) {
 }
 
 function arrfetchImages() {
+  setTimeout(() => {
+    console.log(totalHit);
+
+    const totalPages = Math.ceil(totalHit / newsApiService.perPage);
+
+    if (newsApiService.page > totalPages) {
+      Notiflix.Notify.failure(
+        "We're sorry, but you've reached the end of search results."
+      );
+      observer.unobserve(refs.sentinel);
+      return;
+    }
+  }, 500);
+
   newsApiService
     .fetchImages()
     .then(response => {
       const arrImages = response.data.hits;
+      totalHit = response.data.totalHits;
       newsApiService.incrementPage();
 
       if (!messageShown && response.data.totalHits !== 0) {
@@ -64,14 +81,6 @@ function arrfetchImages() {
           `Hooray! We found ${response.data.totalHits} images.`
         );
         messageShown = true;
-      }
-
-      if (response.data.hits.length === 0) {
-        Notiflix.Notify.failure(
-          "We're sorry, but you've reached the end of search results."
-        );
-        observer.unobserve(refs.sentinel);
-        return;
       }
 
       if (arrImages.length === 0) {
