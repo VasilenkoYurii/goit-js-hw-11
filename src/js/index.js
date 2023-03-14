@@ -67,7 +67,7 @@ function arrfetchImages() {
       observer.unobserve(refs.sentinel);
       return;
     }
-  }, 500);
+  }, 1000);
 
   newsApiService
     .fetchImages()
